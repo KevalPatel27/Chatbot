@@ -7,3 +7,4 @@ langchain-openai
 qdrant-client
 langchain-qdrant
 tiktoken
+gunicorn
