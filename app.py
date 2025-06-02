@@ -288,7 +288,7 @@ def ask_bot():
 def send_support_email():
     data = request.get_json() or {}
     try:
-        send_email(data.get('name'), data.get('email'), data.get('prompt'))
+        send_email(data.get('name'), data.get('email'), data.get('user_issue'))
         return jsonify({"status": "success"}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
