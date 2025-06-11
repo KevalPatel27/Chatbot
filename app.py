@@ -45,20 +45,23 @@ class RealIPMiddleware(BaseHTTPMiddleware):
             logger.info(f"{header}: {value}")
         logger.info("=====================")
         
+        resolved_ip = original_ip
         # Try to get IP from X-Forwarded-For header first
         forwarded = request.headers.get("X-Forwarded-For")
         if forwarded:
             # X-Forwarded-For can contain multiple IPs, take the first one
             new_ip = forwarded.split(",")[0].strip()
             logger.info(f"Found IP from X-Forwarded-For: {new_ip}")
-            request.client.host = new_ip
+            resolved_ip = new_ip
         # If no X-Forwarded-For, try X-Real-IP
         elif request.headers.get("X-Real-IP"):
             new_ip = request.headers.get("X-Real-IP")
             logger.info(f"Found IP from X-Real-IP: {new_ip}")
-            request.client.host = new_ip
+            resolved_ip = new_ip
         else:
             logger.info(f"No proxy headers found, using original IP: {original_ip}")
+            
+        request.state.client_ip = resolved_ip # Store the resolved IP in request.state
             
         return await call_next(request)
 
@@ -344,7 +347,7 @@ async def ask_bot(request: AskRequest, req: Request, redis: Redis = Depends(get_
         return {"response": "OK"}
 
     # Get user's IP for rate limiting
-    ip = req.client.host
+    ip = req.state.client_ip # Use the IP from request.state
     ip_key = f"rate:ip:{ip}"
     
     try:
