@@ -1,10 +1,30 @@
-Flask
-flask-cors
+# FastAPI and server
+fastapi
+uvicorn
 python-dotenv
-groq                
-langchain           
+pydantic
+starlette
+# Redis and rate limiting
+redis
+fastapi-limiter
+hiredis
+# LLM and Embeddings
+langchain
 langchain-openai
-qdrant-client
 langchain-qdrant
+groq
 tiktoken
-gunicorn
+# Vector Store
+qdrant-client
+# HTTP Client
+httpx
+# Email
+Utilities
+python-multipart
+tenacity
+tqdm
+beautifulsoup4
+# Logging and monitoring
+structlog
+# Security
+itsdangerous
